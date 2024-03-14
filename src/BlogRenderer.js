@@ -1,4 +1,6 @@
 import Markdown from "markdown-to-jsx";
+import { Prism } from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const markdown = `# Hello, Markdown!
 ## Lists
@@ -28,7 +30,15 @@ const markdown = `# Hello, Markdown!
 > This is a blockquote.
 > It can span multiple lines.
 
-<inlinecode>Inline code</inlinecode>`;
+<inlinecode>Inline code</inlinecode>
+<br>
+<br>
+JavaScript code:
+
+~~~js
+console.log('Hello, world!');
+~~~
+`;
 
 const BlogRenderer = () => {
   return (
@@ -36,6 +46,7 @@ const BlogRenderer = () => {
       options={{
         overrides: {
           inlinecode: InlineCode,
+          code: CodeBlock,
         },
       }}
     >
@@ -62,3 +73,13 @@ const InlineCode = ({ children }) => {
     </span>
   );
 };
+
+const CodeBlock = ({ className, children }) => {
+  const language = className ? className.split("-")[1] : "";
+  return (
+    <Prism language={language} style={darcula} showLineNumbers={true}>
+      {children}
+    </Prism>
+  );
+};
+
